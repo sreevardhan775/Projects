@@ -1,0 +1,156 @@
+#include <RH_ASK.h> // Include RadioHead Amplitude Shift Keying Library
+#include <SPI.h>    // Include dependant SPI Library
+
+// Create Amplitude Shift Keying Object
+RH_ASK rf_driver;
+#define enA 5
+#define in1 6
+#define in2 7
+
+#define in3 8
+#define in4 9
+#define enB 10
+int led=13;
+
+int motorSpeedA = 100;
+int motorSpeedB = 100;
+
+void setup()
+{
+  // Initialize ASK Object
+  rf_driver.init();
+  // Setup Serial Monitor
+  pinMode(enA, OUTPUT);
+pinMode(in1, OUTPUT);
+pinMode(in2, OUTPUT);
+pinMode(in3, OUTPUT);
+pinMode(in4, OUTPUT);
+pinMode(enB, OUTPUT);
+pinMode(led, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  // Set buffer to size of expected message
+  uint8_t buf[1];
+  uint8_t buflen = sizeof(buf);
+  // Check if received packet is correct size
+  if (rf_driver.recv(buf, &buflen))
+  {
+    // Message received with valid checksum
+    Serial.print("Message Received: ");
+
+    // Convert the received data to a character
+    char receivedChar = (char)buf[0];
+    Serial.println(receivedChar);
+
+    // Check if the received message is "0"
+    if (receivedChar == '0')
+    {
+      digitalWrite(led,LOW);
+      digitalWrite(in1, LOW);
+digitalWrite(in2, LOW);
+// Set Motor B stop
+digitalWrite(in3, LOW);
+digitalWrite(in4, LOW);
+       
+      Serial.println("Stop");
+      // Add code here to perform the "stop" action if needed
+    }
+    if (receivedChar == '1')
+    {
+      digitalWrite(led,HIGH);
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
+    // Set Motor B forward
+    digitalWrite(in3, LOW);
+    digitalWrite(in4, HIGH);
+      Serial.println("Forword");
+      
+      void forword();
+      // Add code here to perform the "stop" action if needed
+    }
+    if (receivedChar == '2'){
+      digitalWrite(led,HIGH);
+      digitalWrite(in1, HIGH);
+      digitalWrite(in2, LOW);
+      // Set Motor B backward 
+      digitalWrite(in3, HIGH);
+      digitalWrite(in4, LOW);
+      Serial.println("Right");
+      void turnRight();
+      // Add code here to perform the "stop" action if needed
+    }
+    if (receivedChar == '3')
+    {
+      digitalWrite(led,HIGH);
+      Serial.println("Left");
+      digitalWrite(in1, LOW);
+      digitalWrite(in2, HIGH);
+// Set Motor B forward 
+      digitalWrite(in3, LOW);
+      digitalWrite(in4, HIGH);
+    }
+    if (receivedChar == '4')
+    {
+      digitalWrite(led,HIGH);
+      digitalWrite(in1, LOW);
+      digitalWrite(in2, HIGH);
+      // Set Motor B backward
+      digitalWrite(in3, HIGH);
+      digitalWrite(in4, LOW);
+      Serial.println("Backword");
+      
+      // Add code here to perform the "stop" action if needed
+    }
+    analogWrite(enA, motorSpeedA); // Send PWM signal to motor A
+    analogWrite(enB, motorSpeedB);
+  }
+}
+
+// void forword(){
+// // Set Motor A forward
+// digitalWrite(led,HIGH);
+// digitalWrite(in1, HIGH);
+// digitalWrite(in2, LOW);
+// // Set Motor B forward
+// digitalWrite(in3, LOW);
+// digitalWrite(in4, HIGH);
+// }
+
+// void backword(){    
+// // Set Motor A backward
+// digitalWrite(in1, LOW);
+// digitalWrite(in2, HIGH);
+// // Set Motor B backward
+// digitalWrite(in3, HIGH);
+// digitalWrite(in4, LOW);
+// }
+
+// void turnRight(){
+// // Set Motor A forward
+// digitalWrite(in1, LOW);
+// digitalWrite(in2, HIGH);
+// // Set Motor B backward 
+// digitalWrite(in3, LOW);
+// digitalWrite(in4, HIGH);
+// }
+
+// void turnLeft(){
+// // Set Motor B backward 
+// digitalWrite(in1, LOW);
+// digitalWrite(in2, HIGH);
+// // Set Motor B forward 
+// digitalWrite(in3, LOW);
+// digitalWrite(in4, HIGH);
+// }
+
+// void Stop(){
+// // Set Motor A stop
+// digitalWrite(in1, LOW);
+// digitalWrite(in2, LOW);
+// // Set Motor B stop
+// digitalWrite(in3, LOW);
+// digitalWrite(in4, LOW);
+// }
