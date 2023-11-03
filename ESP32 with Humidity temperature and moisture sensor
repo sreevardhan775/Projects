@@ -1,0 +1,67 @@
+#define BLYNK_TEMPLATE_ID "TMPL3mmAImmWQ"
+#define BLYNK_TEMPLATE_NAME "Humidity and temprature monitor"
+#define BLYNK_AUTH_TOKEN "rc3t01iV4cF8fNBe37kAlgLh9TNby2MG"
+#define BLYNK_PRINT Serial
+#include <WiFi.h>
+#include <DHT.h> 
+//#include <ESP8266WiFi.h> 
+#include <BlynkSimpleEsp32.h>
+
+char auth[] = BLYNK_AUTH_TOKEN;
+char ssid[] = "ATL UTTARAHALLI";  // type your wifi name
+char pass[] = "ATLKPSUtr@400";  // type your wifi password
+
+
+#define DHTPin 27
+#define DHTTYPE DHT11  
+DHT dht(DHTPin, DHTTYPE);
+int sensor_Pin= A0;
+#define LED 26
+#define motor 5
+
+int output_value ;
+
+BlynkTimer timer;
+
+void setup(){
+  Serial.begin(115200);
+    dht.begin();
+  pinMode(5,OUTPUT);  
+  Blynk.begin(auth, ssid, pass);
+   pinMode(sensor_Pin,INPUT);
+   pinMode(LED,OUTPUT);
+  
+  
+  
+}
+ void loop(){
+    Blynk.run();
+  timer.run();
+    float h = dht.readHumidity();
+  float t = dht.readTemperature();
+  
+  Blynk.virtualWrite(V0, t);
+    Blynk.virtualWrite(V1, h);
+     Blynk.virtualWrite(V2, output_value);
+    Serial.print("Temperature : ");
+    Serial.print(t);
+    Serial.print("  Humidity : ");
+    Serial.println(h);
+    output_value= analogRead(sensor_Pin);
+    
+   output_value = map(output_value,100,0,0,1);
+   Serial.print("   Moisture :");
+   Serial.println(output_value);  
+   if(output_value>=-20){
+    digitalWrite(LED,HIGH);
+    digitalWrite(motor,LOW);
+      
+  }
+   
+   else{
+    digitalWrite(LED,LOW);
+    digitalWrite(motor,HIGH);
+   }
+  
+  
+ }
