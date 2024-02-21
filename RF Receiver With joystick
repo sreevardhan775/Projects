@@ -1,3 +1,4 @@
+// connect data pin to 11
 #include <RH_ASK.h> // Include RadioHead Amplitude Shift Keying Library
 #include <SPI.h>    // Include dependant SPI Library
 
