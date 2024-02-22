@@ -139,15 +139,7 @@ if (mySerial.available())
   
 } 
     
-    if(command=='f'){
-      Serial.println("F**K");
-      servo1.write(0);
-      servo2.write(0);
-      servo3.write(180);
-      servo4.write(180);
-      servo5.write(180);
-    }
-    
+     
       
 //     set to normal pos
      if (command=='s')
